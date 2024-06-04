@@ -9,7 +9,8 @@ function App() {
   const todos=useSelector((state)=>state.todos)
 
   return (
-      <div>
+    <div>
+      Sample to apply redux usage instead of react context-api
       <AddTodo />
     <div>Todos</div>
       <ul className="list-none">
