@@ -1,28 +1,51 @@
-import { useSelector, useDispatch } from "react-redux"
-import { removeTodo } from "../features/todo/todoSlice"
+import {  useDispatch } from "react-redux"
+import { updateTodo,removeTodo } from "../features/todo/todoSlice"
+import { useState } from "react"
 
-function Todo() {
+function Todo({todoObj}) {
 
-  const todos = useSelector((state) => state.todos)
+
   const dispatch = useDispatch()
+  const [isTodoEditable, setIsTodoEditable] = useState(false)
+  const [todoMsg,setTodoMsg]=useState(todoObj.text)
   
+  const changeTodo = () => {
+    dispatch(updateTodo(todoMsg))
+    setIsTodoEditable(false)
+  }
+
   const delTodo = (id) => {
     dispatch(removeTodo(id))
   }
 
+
    return (
     <>
-    <div>Todos</div>
-    <ul className="list-none">
-        {todos.map((todo) => (
-          <li
-            className="mt-4 flex justify-between items-center bg-zinc-800 px-4 py-2 rounded"
-            key={todo.id}
-          >
-            <div className='text-white'>{todo.text}</div>
+             <input
+                type="text"
+                className={`border outline-none w-full bg-transparent rounded-lg ${isTodoEditable ? "border-black/10 px-2" : "border-transparent"
+                  } `}
+                value={todoMsg}
+                onChange={(e) => setTodoMsg(e.target.value)}
+                readOnly={!isTodoEditable}
+              />
+  
+           
+      <button
+        className="inline-flex w-8 h-8 rounded-lg text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0 disabled:opacity-50"
+        onClick={() => {
+          if (isTodoEditable) {
+            changeTodo();
+          } else setIsTodoEditable((prev) => !prev);
+        }}
+
+       >
+          {isTodoEditable? "📁" : "✏️"}
+      </button>
+
             <button
               className="text-white bg-red-500 border-0 py-1 px-4 focus:outline-none hover:bg-red-600 rounded text-md"
-              onClick={()=>{delTodo(todo.id)}}
+              onClick={()=>{delTodo(todoObj.id)}}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -39,9 +62,6 @@ function Todo() {
                 />
               </svg>
             </button>
-          </li>
-        ))}
-      </ul>
     </>
   )
 }
