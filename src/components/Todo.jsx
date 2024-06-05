@@ -17,8 +17,7 @@ function Todo({todoObj}) {
   const delTodo = (id) => {
     dispatch(removeTodo(id))
   }
-
-
+  
    return (
     <>
              <input
